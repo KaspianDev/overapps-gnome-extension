@@ -2,17 +2,19 @@ const {
     Clutter
 } = imports.gi;
 const Main = imports.ui.main;
+let keyReleaseConnector = null;
+let keyPressConnector = null;
 
 function init() {}
 
 function enable() {
     var press = false;
-    global.stage.connectObject('key-release-event', (a, e) => {
+    keyReleaseConnector = global.stage.connect('key-release-event', (a, e) => {
         if (Main.overview._shown && e.get_key_symbol() === Clutter.KEY_space) {
             press = false;
         }
     });
-    global.stage.connectObject('key-press-event', (a, e) => {
+    keyPressConnector = global.stage.connect('key-press-event', (a, e) => {
         if (Main.overview._shown && e.get_key_symbol() === Clutter.KEY_space) {
             if (press) return;
             press = true;
@@ -25,4 +27,14 @@ function enable() {
     });
 }
 
-function disable() {}
+function disable() {
+    if (keyReleaseConnector) {
+        global.settings.disconnect(keyReleaseConnector);
+        keyReleaseConnector = null;
+    }
+    if (keyPressConnector) {
+        global.settings.disconnect(keyPressConnector);
+        keyPressConnector = null;
+        log("disconnected")
+    }
+}
