@@ -1,0 +1,8 @@
+{
+  "name": "Apps in Overview",
+  "description": "Show applications while being in overview menu",
+  "uuid": "overapps@kacperleaguenine.gmail.com",
+  "shell-version": [
+    "42"
+  ]
+}
